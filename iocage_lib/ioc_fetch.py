@@ -61,8 +61,7 @@ class IOCFetch(object):
                  hardened=False,
                  update=True,
                  eol=True,
-                 files=("MANIFEST", "base.txz", "lib32.txz", "doc.txz",
-                        "src.txz"),
+                 files=None
                  silent=False,
                  callback=None):
         self.pool = iocage_lib.ioc_json.IOCJson().json_get_value("pool")
@@ -84,7 +83,15 @@ class IOCFetch(object):
         self._file = _file
         self.verify = verify
         self.hardened = hardened
-        self.files = files
+
+        if files:
+            self.files = files
+        else:
+            if self.arch == "i386":
+                self.files = ("MANIFEST", "base.txz", "doc.txz", "src.txz")
+            else:
+                self.files = ("MANIFEST", "base.txz", "doc.txz", "lib32.txz", "src.txz")
+
         self.update = update
         self.eol = eol
         self.silent = silent
